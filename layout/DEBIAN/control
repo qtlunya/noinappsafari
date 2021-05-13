@@ -1,0 +1,12 @@
+Package: net.cadoth.noinappsafari
+Name: NoInAppSafari
+Version: 0.1.0
+Architecture: iphoneos-arm
+Description: Disable in-app browsers globally
+Depiction: https://repo.cadoth.net/depictions/net.cadoth.noinappsafari.html
+SileoDepiction: https://repo.cadoth.net/sileo-depictions/net.cadoth.noinappsafari.json
+Maintainer: nyuszika7h <nyuszika7h@gmail.com>
+Author: nyuszika7h <nyuszika7h@gmail.com>
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000)
+Conflicts: in.net.mario.tweak.openurlprompt
