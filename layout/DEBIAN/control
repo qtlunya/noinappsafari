@@ -1,6 +1,6 @@
 Package: net.cadoth.noinappsafari
 Name: NoInAppSafari
-Version: 0.1.0
+Version: 0.1.1
 Architecture: iphoneos-arm
 Description: Disable in-app browsers globally
 Depiction: https://repo.cadoth.net/depictions/net.cadoth.noinappsafari.html
