@@ -6,6 +6,7 @@
 -(NSURL *)initialURL;
 @end
 
+%group main
 %hook SFSafariViewController
 -(void)viewWillAppear:(BOOL)animated {
     NSURL *url = [self initialURL];
@@ -25,3 +26,14 @@
     [transitionContext completeTransition:NO];
 }
 %end
+%end
+
+%ctor {
+    NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
+
+    if ([bundleID hasPrefix:@"com.apple."]) {
+        return;
+    }
+
+    %init(main);
+}
