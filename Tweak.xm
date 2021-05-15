@@ -11,7 +11,7 @@
     NSURL *url = [self initialURL];
     NSString *urlStr = [url absoluteString];
 
-    if ([urlStr hasPrefix:@"https://twitter.com/account/login_verification"]) {
+    if ([urlStr hasPrefix:@"https://twitter.com/account/"]) {
         return %orig;
     }
 
