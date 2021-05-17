@@ -29,10 +29,29 @@
 %end
 
 %ctor {
-    NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
+    NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
 
-    if ([bundleID hasPrefix:@"com.apple."]) {
-        return;
+    NSArray *excludeBundleIds = @[
+        @"com.apple.*",
+        @"me.apptapp.installer",
+        @"org.coolstar.SileoBeta",
+        @"org.coolstar.SileoNightly",
+        @"org.coolstar.SileoStore",
+        @"xyz.willy.Zebra",
+    ];
+
+    for (NSString *bid in excludeBundleIds) {
+        if ([bid hasSuffix:@"*"]) {
+            NSString *prefix = [bid substringToIndex:[bid length] - 1];
+
+            if ([bundleId hasPrefix:prefix]) {
+                return;
+            }
+        }
+
+        if ([bundleId isEqualToString:bid]) {
+            return;
+        }
     }
 
     %init(main);
