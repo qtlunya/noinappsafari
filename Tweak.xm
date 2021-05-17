@@ -47,9 +47,7 @@
             if ([bundleId hasPrefix:prefix]) {
                 return;
             }
-        }
-
-        if ([bundleId isEqualToString:bid]) {
+        } else if ([bundleId isEqualToString:bid]) {
             return;
         }
     }
