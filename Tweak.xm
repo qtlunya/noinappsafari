@@ -12,7 +12,8 @@
     NSURL *url = [self initialURL];
     NSString *urlStr = [url absoluteString];
 
-    if ([urlStr hasPrefix:@"https://twitter.com/account/"]) {
+    if ([urlStr hasPrefix:@"https://twitter.com/account/"] ||
+            [urlStr hasPrefix:@"https://api.twitter.com/"]) {
         return %orig;
     }
 
