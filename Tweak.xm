@@ -3,12 +3,15 @@
 #import <UIKit/UIViewControllerTransitioning.h>
 
 @interface SFSafariViewController : UIViewController
--(NSURL *)initialURL;
+- (NSURL *)initialURL;
 @end
 
+static NSUserDefaults *prefs;
+
 %group main
+
 %hook SFSafariViewController
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     NSURL *url = [self initialURL];
     NSString *urlStr = [url absoluteString];
 
@@ -23,35 +26,40 @@
 %end
 
 %hook SFInteractiveDismissController
--(void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     [transitionContext completeTransition:NO];
 }
 %end
+
 %end
 
+void NISReloadPrefs() {
+    prefs = [[NSUserDefaults alloc] initWithSuiteName:@"/var/mobile/Library/Preferences/net.cadoth.noinappsafari.plist"];
+}
+
 %ctor {
-    NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
+    @autoreleasepool {
+        NISReloadPrefs();
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)NISReloadPrefs, CFSTR("net.cadoth.noinappsafari/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 
-    NSArray *excludeBundleIds = @[
-        @"com.apple.*",
-        @"me.apptapp.installer",
-        @"org.coolstar.SileoBeta",
-        @"org.coolstar.SileoNightly",
-        @"org.coolstar.SileoStore",
-        @"xyz.willy.Zebra",
-    ];
+        NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
 
-    for (NSString *bid in excludeBundleIds) {
-        if ([bid hasSuffix:@"*"]) {
-            NSString *prefix = [bid substringToIndex:[bid length] - 1];
-
-            if ([bundleId hasPrefix:prefix]) {
-                return;
-            }
-        } else if ([bundleId isEqualToString:bid]) {
+        if (![[prefs objectForKey:@"enabled"] boolValue]) {
+            NSLog(@"Not loading into %@, tweak is disabled globally", bundleId);
             return;
         }
-    }
 
-    %init(main);
+        if ([bundleId hasPrefix:@"com.apple."]) {
+            NSLog(@"Not loading into %@, is a system app", bundleId);
+            return;
+        }
+
+        if ([[prefs objectForKey:[NSString stringWithFormat:@"disabled-%@", bundleId]] boolValue]) {
+            NSLog(@"Not loading into %@, tweak is disabled for app", bundleId);
+            return;
+        }
+
+        NSLog(@"Loading into %@", bundleId);
+        %init(main);
+    }
 }
