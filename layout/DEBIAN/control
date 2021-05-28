@@ -8,5 +8,5 @@ SileoDepiction: https://repo.cadoth.net/sileo-depictions/net.cadoth.noinappsafar
 Maintainer: nyuszika7h <nyuszika7h@gmail.com>
 Author: nyuszika7h <nyuszika7h@gmail.com>
 Section: Tweaks
-Depends: mobilesubstrate (>= 0.9.5000), applist
+Depends: mobilesubstrate (>= 0.9.5000), preferenceloader, applist, ws.hbang.common (>= 1.16)
 Conflicts: in.net.mario.tweak.openurlprompt

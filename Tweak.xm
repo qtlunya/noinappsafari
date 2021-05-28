@@ -1,12 +1,13 @@
 #import <UIKit/UIApplication.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
+#import <Cephei/HBPreferences.h>
 
 @interface SFSafariViewController : UIViewController
 - (NSURL *)initialURL;
 @end
 
-static NSUserDefaults *prefs;
+HBPreferences *prefs;
 
 %group main
 
@@ -33,18 +34,17 @@ static NSUserDefaults *prefs;
 
 %end
 
-void NISReloadPrefs() {
-    prefs = [[NSUserDefaults alloc] initWithSuiteName:@"/var/mobile/Library/Preferences/net.cadoth.noinappsafari.plist"];
-}
-
 %ctor {
     @autoreleasepool {
-        NISReloadPrefs();
-        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)NISReloadPrefs, CFSTR("net.cadoth.noinappsafari/ReloadPrefs"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+        prefs = [[HBPreferences alloc] initWithIdentifier:@"net.cadoth.noinappsafari"];
+
+        [prefs registerDefaults:@{
+            @"enabled": @YES,
+        }];
 
         NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
 
-        if (![[prefs objectForKey:@"enabled"] boolValue]) {
+        if (![prefs boolForKey:@"enabled"]) {
             NSLog(@"Not loading into %@, tweak is disabled globally", bundleId);
             return;
         }
@@ -54,7 +54,7 @@ void NISReloadPrefs() {
             return;
         }
 
-        if ([[prefs objectForKey:[NSString stringWithFormat:@"disabled-%@", bundleId]] boolValue]) {
+        if ([prefs boolForKey:[NSString stringWithFormat:@"disabled-%@", bundleId]]) {
             NSLog(@"Not loading into %@, tweak is disabled for app", bundleId);
             return;
         }
