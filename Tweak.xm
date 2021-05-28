@@ -1,6 +1,5 @@
-#import <UIKit/UIApplication.h>
-#import <UIKit/UIViewController.h>
-#import <UIKit/UIViewControllerTransitioning.h>
+#import <UIKit/UIKit.h>
+
 #import <Cephei/HBPreferences.h>
 
 @interface SFSafariViewController : UIViewController
@@ -16,8 +15,8 @@ HBPreferences *prefs;
     NSURL *url = [self initialURL];
     NSString *urlStr = [url absoluteString];
 
-    if ([urlStr hasPrefix:@"https://twitter.com/account/"] ||
-            [urlStr hasPrefix:@"https://api.twitter.com/"]) {
+    if ([urlStr hasPrefix:@"https://twitter.com/account/"]
+            || [urlStr hasPrefix:@"https://api.twitter.com/"]) {
         return %orig;
     }
 
@@ -44,17 +43,9 @@ HBPreferences *prefs;
 
         NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
 
-        if (![prefs boolForKey:@"enabled"]) {
-            NSLog(@"Not loading into %@, tweak is disabled globally", bundleId);
-            return;
-        }
-
-        if ([bundleId hasPrefix:@"com.apple."]) {
-            NSLog(@"Not loading into %@, is a system app", bundleId);
-            return;
-        }
-
-        if ([prefs boolForKey:[NSString stringWithFormat:@"disabled-%@", bundleId]]) {
+        if (![prefs boolForKey:@"enabled"]
+                || [bundleId hasPrefix:@"com.apple."]
+                || [prefs boolForKey:[NSString stringWithFormat:@"disabled-%@", bundleId]]) {
             NSLog(@"Not loading into %@, tweak is disabled for app", bundleId);
             return;
         }
