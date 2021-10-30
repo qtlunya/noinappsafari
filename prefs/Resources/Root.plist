@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>title</key>
+    <string>NoInAppSafari</string>
+    <key>items</key>
+    <array>
+        <dict>
+            <key>cell</key>
+            <string>PSSwitchCell</string>
+            <key>defaults</key>
+            <string>net.cadoth.noinappsafari</string>
+            <key>key</key>
+            <string>enabled</string>
+            <key>label</key>
+            <string>Enabled</string>
+            <key>default</key>
+            <true/>
+            <key>PostNotification</key>
+            <string>net.cadoth.noinappsafari/ReloadPrefs</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSLinkCell</string>
+            <key>bundle</key>
+            <string>AppList</string>
+            <key>isController</key>
+            <true/>
+            <key>label</key>
+            <string>Disabled apps</string>
+            <key>ALSettingsPath</key>
+            <string>/var/mobile/Library/Preferences/net.cadoth.noinappsafari.plist</string>
+            <key>ALSettingsKeyPrefix</key>
+            <string>disabled-</string>
+            <key>ALSectionDescriptors</key>
+            <array>
+                <dict>
+                    <key>title</key>
+                    <string>Applications</string>
+                    <key>icon-size</key>
+                    <integer>29</integer>
+                    <key>cell-class-name</key>
+                    <string>ALSwitchCell</string>
+                    <key>predicate</key>
+                    <string>NOT (displayIdentifier BEGINSWITH 'com.apple.')</string>
+                    <key>suppress-hidden-apps</key>
+                    <true/>
+                </dict>
+            </array>
+            <key>ALChangeNotification</key>
+            <string>net.cadoth.noinappsafari/ReloadPrefs</string>
+        </dict>
+    </array>
+</dict>
+</plist>
